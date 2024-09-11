@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/eTMt0O7O)
 # C Programming Assignment: Sparse Matrix Representation as an Array
 
 ## Objective
@@ -26,9 +27,89 @@ The sparse matrix would store the non-zero values as:
 3 1 2      (Element at row 3, column 1 is 2)
 3 3 6      (Element at row 3, column 3 is 6)
 
+
+#include <stdio.h>
+
+#define N 4  // Adjust this according to the number of columns in the matrix
+
+void createSparseMatrix(int sparseMatrix[][3], int originalMatrix[][N], int rows, int cols) {
+    int k = 1;  // Start from 1, as sparseMatrix[0] will store matrix dimensions and non-zero count
+    int nonZeroCount = 0;
+
+    // Iterate through the original matrix to find non-zero elements
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (originalMatrix[i][j] != 0) {
+                sparseMatrix[k][0] = i;      // Row index
+                sparseMatrix[k][1] = j;      // Column index
+                sparseMatrix[k][2] = originalMatrix[i][j]; // Value
+                k++;
+                nonZeroCount++;
+            }
+        }
+    }
+
+    // Store the dimensions and non-zero element count in sparseMatrix[0]
+    sparseMatrix[0][0] = rows;
+    sparseMatrix[0][1] = cols;
+    sparseMatrix[0][2] = nonZeroCount;
+}
+
+int main() {
+    int originalMatrix[4][N] = {
+        {0, 0, 3, 0},
+        {0, 4, 0, 0},
+        {0, 0, 0, 5},
+        {0, 2, 0, 6}
+    };
+
+    // Sparse matrix has dimensions (nonZeroCount + 1) x 3
+    int sparseMatrix[6][3];  // 5 non-zero elements + 1 for the header
+
+    createSparseMatrix(sparseMatrix, originalMatrix, 4, N);
+
+    // Print the sparse matrix
+    printf("Sparse Matrix Representation:\n");
+    for (int i = 0; i <= sparseMatrix[0][2]; i++) {
+        printf("%d %d %d\n", sparseMatrix[i][0], sparseMatrix[i][1], sparseMatrix[i][2]);
+    }
+
+    return 0;
+}
+
 ### 2. `printSparseMatrix`
 - **Function Prototype**: `void printSparseMatrix(int sparseMatrix[][3], int nonZeroCount);`
 - **Description**: This function prints the sparse matrix in a tabular format, displaying the row index, column index, and value of each non-zero element.
+
+#include <stdio.h>
+
+void printSparseMatrix(int sparseMatrix[][3], int nonZeroCount) {
+    // Print header for the table
+    printf("Row\tColumn\tValue\n");
+    
+    // Loop through the non-zero elements and print them
+    for (int i = 0; i < nonZeroCount; i++) {
+        printf("%d\t%d\t%d\n", sparseMatrix[i][0], sparseMatrix[i][1], sparseMatrix[i][2]);
+    }
+}
+
+int main() {
+    // Example sparse matrix representation
+    int sparseMatrix[4][3] = {
+        {0, 1, 3},
+        {1, 2, 5},
+        {2, 0, 6},
+        {3, 3, 9}
+    };
+    
+    // Number of non-zero elements
+    int nonZeroCount = 4;
+    
+    // Call the function to print the sparse matrix
+    printSparseMatrix(sparseMatrix, nonZeroCount);
+    
+    return 0;
+}
 
 ## Instructions
 
